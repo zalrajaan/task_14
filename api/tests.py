@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth.models import User
 from rest_framework.test import APIRequestFactory
 from restaurants.models import Restaurant
 from .views import RestaurantListView
@@ -39,18 +40,23 @@ class RestaurantAPITest(TestCase):
             logo="http://icons.veryicon.com/png/Movie%20%26%20TV/Free%20Star%20Wars/Darth%20Vader.png"
             )
 
-        def test_restaurant_list_view(self):
-            list_url = reverse("api-list")
-            request = self.factory.get(list_url)
-            response = RestaurantListView.as_view()(request)
-            for restaurant in Restaurant.objects.all():
-                self.assertIn(
-                        {
-                            'name':restaurant.name,
-                            'opening_time': restaurant.opening_time,
-                            'closing_time': restaurant.closing_time,
-                            'logo':restaurant.logo
-                        },
-                        response.data
-                    )
-            self.assertEqual(response.status_code, 200)
+    def test_restaurant_list_view(self):
+        list_url = reverse("api-list")
+        request = self.factory.get(list_url)
+        response = RestaurantListView.as_view()(request)
+        self.assertEqual(
+            [
+                {
+                    'name':self.restaurant_1.name,
+                    'opening_time': self.restaurant_1.opening_time,
+                    'closing_time': self.restaurant_1.closing_time,
+                },
+                {
+                    'name':self.restaurant_2.name,
+                    'opening_time': self.restaurant_2.opening_time,
+                    'closing_time': self.restaurant_2.closing_time,
+                },
+            ],
+            response.data
+        )
+        self.assertEqual(response.status_code, 200)
