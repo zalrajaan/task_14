@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
     'restaurants',
     'api',
+
+    'rest_framework',
     'crispy_forms',
 ]
 
