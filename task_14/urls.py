@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from restaurants import views
 from django.conf import settings
 from django.conf.urls.static import static
+from restaurants import views
+from api.views import RestaurantListView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,19 +26,17 @@ urlpatterns = [
     path('restaurants/list/',views.restaurant_list ,name='restaurant-list'),
     path('restaurants/favorite/',views.favorite_restaurants ,name='favorite-restaurant'),
     path('restaurants/<int:restaurant_id>/detail/',views.restaurant_detail ,name='restaurant-detail'),
-
     path('restaurants/create/',views.restaurant_create ,name='restaurant-create'),
     path('restaurants/<int:restaurant_id>/update/',views.restaurant_update ,name='restaurant-update'),
     path('restaurants/<int:restaurant_id>/delete/',views.restaurant_delete ,name='restaurant-delete'),
     path('restaurants/<int:restaurant_id>/favorite/',views.restaurant_favorite ,name='restaurant-favorite'),
-
     path('restaurants/<int:restaurant_id>/item/add/',views.item_create ,name='item-create'),
-
     path('signup/',views.signup ,name='signup'),
     path('signin/',views.signin ,name='signin'),
     path('signout/',views.signout ,name='signout'),
-
     path('no-access/',views.no_access ,name='no-access'),
+
+    path('api/list/', RestaurantListView.as_view(), name='api-list'),
 ]
 
 if settings.DEBUG:
